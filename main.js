@@ -1,86 +1,96 @@
-const librosGenerales = [
-    {
-        nombre: "el psicoanalista",
-        autor:"John Katzenbach",
-    },{
-        nombre: "la biblia",
-        autor: "la iglesia",
+class Libro {
+    constructor(nombre, autor, paginas) {
+        this.nombre = nombre;
+        this.paginas = paginas;
+        this.autor = autor;
+        this.cantidadHoras = this.calcularHoras();
     }
-];
 
-const librosInfatiles = [
-    {
-        nombre: "los tres chanchitos",
-        autor: "Los hermanos Grimm",
-    },{
-        nombre: "el principito",
-        autor: "antoine de saint-exupéry"
-    }, 
-];
+    calcularHoras() {
+        let dificultad = 0;
+        const hora = 50;
+
+        switch(this.nombre) {
+            case "el principito":
+                dificultad = 1.1;
+                break;
+            case "el psicoanalista":
+                dificultad = 1.8;
+                break;
+            case "la biblia":
+                dificultad = 2.2;
+                break;
+            case "los tres chanchitos":
+                dificultad = 1.2;
+                break;    
+            default:
+                dificultad = 1;
+                break;
+        }
+
+        let calculo = (this.paginas/hora)*dificultad;
+
+        return calculo;
+    }
+}
+
+librosGenerales = [];
+librosGenerales.push(new Libro("el psicoanalista", "John Katzenbach", 400));
+librosGenerales.push(new Libro("la biblia", "la iglesia", 600));
+
+librosInfatiles = [];
+librosInfatiles.push(new Libro("los tres chanchitos", "Los hermanos Grimm", 250));
+librosInfatiles.push(new Libro("el principito", "antoine de saint-exupéry", 150));
 
 const libros = librosGenerales.concat(librosInfatiles);
+
+do {
+    var comprobacion = prompt("Ingrese el nombre de su libro o fin para terminar de agregar").toLowerCase();
+    if (comprobacion === "fin") {
+        break;
+    } else {
+        nombreLibro = comprobacion;
+        var nombreAutor = prompt('ingrese el autor');
+        var paginas = parseInt(prompt('Ingrese la cantidad de páginas'));
+        libros.push(new Libro(nombreLibro, paginas, nombreAutor));
+    }
+}
+while(comprobacion !== "fin")
+
 console.log(libros);
 
-const nombreLibro = prompt('ingrese el nombre de su libro');
-
-for (let i = 0; i < libros.length; i++ ) {
-    if (nombreLibro === libros[i].nombre) {
-        alert("Has elegido "+ libros[i].nombre);
-    }
+document.write("<h2>Listado de libros:</h2>");
+for (let libro of libros) {
+    let divLibro = document.createElement("div");
+    divLibro.innerHTML = `<p><strong>${libro.nombre}</strong> </p>
+                        <p><strong>Autor:</strong> ${libro.autor}</p>
+                        <p><strong>Paginas:</strong> ${libro.paginas}</p>
+                        <p>----------------</p>`;
+    document.body.appendChild(divLibro);
 }
 
-const nombreAutor = prompt('ingrese el autor');
+// LIBROS FACIL DE LEER (MENOS DE 10 HORAS)
 
-for (let i = 0; i < libros.length; i++ ) {
-    if (nombreAutor === libros[i].autor) {
-        alert("Has elegido "+ libros[i].autor);
-    }
+var facilitos = libros.filter(libro => libro.cantidadHoras < 10);
+document.write("<h2>Libros faciles de leer:</h2>");
+for (let libro of facilitos) {
+    let divLibro = document.createElement("div");
+    divLibro.innerHTML = `<p><strong>${libro.nombre}</strong> </p>
+                        <p><strong>Cantidad de horas:</strong> ${libro.cantidadHoras}</p>
+                        <p>----------------</p>`;
+    document.body.appendChild(divLibro);
 }
 
-console.log("En nuestra base de datos podrás encontrar: ", libros.length + " libros");
- 
-function pedirPaginas() {
-      return parseInt(prompt('Ingrese la cantidad de páginas'));
-  }
- 
-let paginas = pedirPaginas();
 
-const hora = 50;
+// LIBROS FACIL DE LEER (MAS DE 10 HORAS)
 
-class Libro {
-     constructor(nombre, paginas, autor) {
-         this.nombre = nombre;
-         this.paginas = paginas;
-         this.autor = autor;
-     }
+var dificilitos = libros.filter(libro => libro.cantidadHoras >= 10);
+document.write("<h2>Libros dificiles de leer:</h2>");
+for (let libro of dificilitos) {
+    let divLibro = document.createElement("div");
+    divLibro.innerHTML = `<p><strong>${libro.nombre}</strong> </p>
+                        <p><strong>Cantidad de horas:</strong> ${libro.cantidadHoras}</p>
+                        <p>----------------</p>`;
+    document.body.appendChild(divLibro);
+}
 
-     obtenerDificultad() {
-         let dificultad = 0;
-
-         switch(this.nombre) {
-             case "el principito":
-                 dificultad = 1.0;
-                 break;
-             case "el psicoanalista":
-                 dificultad = 1.8;
-                 break;
-             case "la biblia":
-                 dificultad = 2.2;
-                 break;
-             case "los tres chanchitos":
-                 dificultad = 1.2;
-                 break;    
-             default:
-                 alert("ERROR");
-         }
-
-         let calculo = (this.paginas/hora)*dificultad;
-         console.log("El tiempo de lectura es de "+ calculo + " horas");
-
-     }
- }
-
- const libroX = new Libro(nombreLibro, paginas, nombreAutor) 
- console.log(libroX)
- libroX.obtenerDificultad();
- console.log(libroX);
